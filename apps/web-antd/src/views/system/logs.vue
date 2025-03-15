@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { VbenFormProps } from '#/adapter/form'
 import type { VxeGridProps } from '#/adapter/vxe-table'
 
 import { EllipsisText, Page } from '@vben/common-ui'
@@ -7,6 +8,51 @@ import { Tag } from 'ant-design-vue'
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table'
 import { logApi } from '#/api/system/log'
+
+const formOptions: VbenFormProps = {
+  collapsed: false,
+  schema: [
+    {
+      component: 'InputNumber',
+      componentProps: {
+        placeholder: '请输入用户ID',
+        min: 1,
+        precision: 0,
+      },
+      fieldName: 'userId',
+      label: '用户ID',
+    },
+    {
+      component: 'DatePicker',
+      componentProps: {
+        placeholder: '请选择开始时间',
+        showTime: true,
+        format: 'YYYY-MM-DD HH:mm:ss',
+      },
+      fieldName: 'startTime',
+      label: '开始时间',
+    },
+    {
+      component: 'DatePicker',
+      componentProps: {
+        placeholder: '请选择结束时间',
+        showTime: true,
+        format: 'YYYY-MM-DD HH:mm:ss',
+      },
+      fieldName: 'endTime',
+      label: '结束时间',
+    },
+  ],
+  // 控制表单是否显示折叠按钮
+  showCollapseButton: true,
+  submitButtonOptions: {
+    content: '查询',
+  },
+  // 是否在字段值改变时提交表单
+  submitOnChange: false,
+  // 按下回车时是否提交表单
+  submitOnEnter: true,
+}
 
 const gridOptions: VxeGridProps = {
   columns: [
@@ -22,10 +68,11 @@ const gridOptions: VxeGridProps = {
   height: 'auto',
   proxyConfig: {
     ajax: {
-      query: async ({ page }) => {
+      query: async ({ page }, formValues) => {
         return await logApi.list({
           page: page.currentPage,
           limit: page.pageSize,
+          ...formValues,
         })
       },
     },
@@ -37,9 +84,7 @@ const gridOptions: VxeGridProps = {
   },
 }
 
-const [Grid] = useVbenVxeGrid({
-  gridOptions,
-})
+const [Grid] = useVbenVxeGrid({ formOptions, gridOptions })
 
 const methodColorMap: Record<string, string> = {
   POST: '#108ee9',

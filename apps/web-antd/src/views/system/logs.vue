@@ -59,7 +59,7 @@ const gridOptions: VxeGridProps = {
     { field: 'id', title: 'ID', width: 100 },
     { field: 'description', title: '操作' },
     { title: '操作人', slots: { default: 'operator' } },
-    { field: 'method', title: '请求类型', slots: { default: 'method' } },
+    { title: '请求类型', slots: { default: 'method' } },
     { field: 'ip', title: 'IP' },
     { field: 'createdAt', title: '操作时间' },
     { title: '请求参数', width: 200, slots: { default: 'body' } },
